@@ -55,15 +55,22 @@ $(document).ready(function() {
     function handelSaveIconClick(e){
         if(!$(e.target).hasClass('saveBtn')) return
         var time = $(e.target).attr("data-unixTime")
-        var taskDesc = $(e.target).parent().children(".description").val()
+        var taskDesc = $(e.target).prev(".description").val()
         if (taskDesc.length < 1) return 
-        console.log(time)
-        console.log(taskDesc)
 
-        var newTask = {time,taskDesc}
+        var newTask = {}
+        newTask[time] = taskDesc //Format newTaks so it looks like {time: taskDesc}
+        
         
         var plannerData = JSON.parse(localStorage.getItem("plannerData"))
         if (!plannerData) plannerData = []
+
+        const indexToRemove = plannerData.findIndex(newTask => newTask.hasOwnProperty(time));
+        if (indexToRemove !== -1) {
+            // Key exists, remove the object at the found index
+            plannerData.splice(indexToRemove, 1);
+          }
+
         localStorage.setItem("plannerData", JSON.stringify([...plannerData, newTask])) 
     }
 
