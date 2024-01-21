@@ -67,15 +67,22 @@ $(document).ready(function() {
         if(!$(e.target).hasClass('saveBtn')) return
         var time = $(e.target).attr("data-unixTime")
         var taskDesc = $(e.target).prev(".description").val()
-        if (taskDesc.length < 1) return 
+        plannerData = JSON.parse(localStorage.getItem("plannerData"))
+        if (!plannerData) plannerData = []
+
+        if (taskDesc.length < 1){
+            if(plannerData.find(obj => obj.hasOwnProperty(time))){
+                var temp = plannerData.filter(obj => !obj.hasOwnProperty(time));
+                localStorage.removeItem("plannerData")
+                localStorage.setItem("plannerData", JSON.stringify(temp))
+            }
+            console.log("tt")
+            return
+        } 
 
         var newTask = {}
         newTask[time] = taskDesc //Format newTaks so it looks like {time: taskDesc}
         
-        
-        plannerData = JSON.parse(localStorage.getItem("plannerData"))
-        if (!plannerData) plannerData = []
-
         const indexToRemove = plannerData.findIndex(newTask => newTask.hasOwnProperty(time));
         if (indexToRemove !== -1) {
             // Key exists, remove the object at the found index
