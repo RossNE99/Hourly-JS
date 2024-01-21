@@ -19,23 +19,24 @@ $(document).ready(function() {
         return hoursArray;
     }
 
-    const startTime = '2024-01-20 09:00:00'; //this will be replaced, only for testing
-    const endTime = '2024-01-20 17:00:00';  //this will be replaced, only for testing
+    const startTime = '2024-01-21 09:00:00'; //this will be replaced, only for testing
+    const endTime = '2024-01-21 17:00:00';  //this will be replaced, only for testing
 
     function renderPlanner() {
         $.each(getHoursBetween(startTime, endTime), function( index, value ) {
             var hourDiv = $("<div>", {
                 class: "hour col-1",
-                text: value.format('hA')
+                text: value.format('hA'),
             })
             var textDivColor = dayjs().isAfter(value, 'hour') ? "past" : dayjs().isSame(value, 'hour') ? "present" : "future"
             var discriptionText =  $("<textarea>", {
                 class: `description col ${textDivColor}`,
-                text: ""
+                text: "Test "+index,
             })
 
             var saveButtonDiv = $("<div>", {
                 class: "saveBtn col-1",
+                "data-unixTime": value
             })
             
             var timeBloclkRow = $("<div>", {
@@ -50,5 +51,22 @@ $(document).ready(function() {
         });
     }
 
+
+    function handelSaveIconClick(e){
+        if(!$(e.target).hasClass('saveBtn')) return
+        var time = $(e.target).attr("data-unixTime")
+        var taskDesc = $(e.target).parent().children(".description").val()
+        if (taskDesc.length < 1) return 
+        console.log(time)
+        console.log(taskDesc)
+
+        var newTask = {time,taskDesc}
+        
+        var plannerData = JSON.parse(localStorage.getItem("plannerData"))
+        if (!plannerData) plannerData = []
+        localStorage.setItem("plannerData", JSON.stringify([...plannerData, newTask])) 
+    }
+
     renderPlanner()
+    $(".container").on("click", handelSaveIconClick)
 })
