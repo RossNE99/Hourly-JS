@@ -4,6 +4,9 @@ $(document).ready(function() {
 
     $("#currentDay").text(currentDay)
 
+    var plannerData = JSON.parse(localStorage.getItem("plannerData"))
+    if (!plannerData) plannerData = []
+
     function getHoursBetween(start, end) {
         const startHour = dayjs(start).startOf('hour');
         const endHour = dayjs(end).startOf('hour');
@@ -31,12 +34,12 @@ $(document).ready(function() {
             var textDivColor = dayjs().isAfter(value, 'hour') ? "past" : dayjs().isSame(value, 'hour') ? "present" : "future"
             var discriptionText =  $("<textarea>", {
                 class: `description col ${textDivColor}`,
-                text: "Test "+index,
+                text: getTaskDescForTime(value.unix())
             })
 
             var saveButtonDiv = $("<div>", {
                 class: "saveBtn col-1",
-                "data-unixTime": value
+                "data-unixTime": value.unix()
             })
             
             var timeBloclkRow = $("<div>", {
@@ -51,6 +54,14 @@ $(document).ready(function() {
         });
     }
 
+    function getTaskDescForTime(time) {
+        const foundTime = plannerData.find(obj => obj.hasOwnProperty(time));
+        if (foundTime) {
+          return foundTime[time];
+        } else {
+          return '';
+        }
+      }
 
     function handelSaveIconClick(e){
         if(!$(e.target).hasClass('saveBtn')) return
@@ -62,7 +73,7 @@ $(document).ready(function() {
         newTask[time] = taskDesc //Format newTaks so it looks like {time: taskDesc}
         
         
-        var plannerData = JSON.parse(localStorage.getItem("plannerData"))
+        plannerData = JSON.parse(localStorage.getItem("plannerData"))
         if (!plannerData) plannerData = []
 
         const indexToRemove = plannerData.findIndex(newTask => newTask.hasOwnProperty(time));
