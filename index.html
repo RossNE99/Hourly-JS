@@ -24,6 +24,7 @@
       href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <link rel="stylesheet" href="assets/css/style.css" />
     <title>Work Day Scheduler</title>
   </head>
@@ -33,6 +34,13 @@
       <h1 class="display-3">Work Day Scheduler</h1>
       <p class="lead">A simple calendar app for scheduling your work day</p>
       <p id="currentDay" class="lead"></p>
+      <h3>Range</h3>
+      <input style="width: 310px;" type="text" id="date-time-range" />
+      <div id="day-controll-buttons" class="mt-2">
+        <button id="backADay"><</button>
+        <button id="today">Today, 9 To 6</button>
+        <button id="forwardADay">></button>
+      </div>
     </header>
     <div class="container">
       <!-- Timeblocks go here -->
@@ -45,6 +53,8 @@
     crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/advancedFormat.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script src="assets/js/script.js"></script>
   </body>
 </html>
