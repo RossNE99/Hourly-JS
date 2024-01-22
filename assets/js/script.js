@@ -53,18 +53,7 @@ $(document).ready(function() {
                 const isSameDay = startTimeObj.format('YYYY-MM-DD') === endTimeObj.format('YYYY-MM-DD');
                 console.log(isSameDay)
                 if(!isSameDay){
-                    console.log("dsad")
-                    var buttonFeedback = $("<p>",{
-                        id: "button-feedback",
-                        text: "Only one day must be selcted to use the prev and next buttons, if you have a range set please change it to one day only",
-                        style: "color: red",
-                        class: "mt-2"
-                    })
-                    $("#day-controll-buttons").append(buttonFeedback)
-
-                    setTimeout(() => {
-                        $("#button-feedback").remove()
-                    },3500)
+                    showToast("Error", `Only one day must be selcted to use the prev and next buttons, if you have a range set please change it to one day only`, `fa-exclamation-triangle`, `red`)
                 }
                 return isSameDay
             }
@@ -156,6 +145,29 @@ $(document).ready(function() {
         var plannerDataWithEditedTask = plannerData.filter(obj => !obj.hasOwnProperty(time)); // Key exists, remove the object at the found index
 
         localStorage.setItem("plannerData", JSON.stringify([...plannerDataWithEditedTask, newTask])) 
+        showToast("Saved!", `your task: ${taskDesc}. has been saved for ${dayjs(time).format("Do MMM hA")}`, `fa-save`, 'blue')
+    }
+
+    function showToast(title, message, icon, color){
+        var toast = $("<div>",{
+            id: "toast", class: "toast m-2 mt-4", role: "alert", "aria-live": "assertive", "aria-atomic":"true", style: `display: block; position: fixed; top: 0; right: 0;"`,
+            html:
+            `<div class="toast-header">
+              <i style="color: ${color};" class="fas ${icon} m-2" aria-hidden="true"></i>
+              <strong class="me-auto">${title}</strong>
+              <small>Now</small>
+              <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+              ${message}
+            </div>`
+        })
+        
+        $("body").append(toast)
+
+        setTimeout(() => {
+            $("#toast").remove()
+        },3500)
     }
 
     renderPlanner()
