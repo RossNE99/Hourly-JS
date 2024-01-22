@@ -136,6 +136,7 @@ $(document).ready(function() {
                 localStorage.removeItem("plannerData")
                 localStorage.setItem("plannerData", JSON.stringify(plannerDataWithoutDeletedTask))
             }
+            showToast("Deleted!", `your task for ${dayjs(time).format("Do MMM hA")} has now been deleted/cleared`, `fa-trash-alt`, 'yellow')
             return
         } 
 
