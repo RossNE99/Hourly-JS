@@ -105,8 +105,9 @@ $(document).ready(function() {
             })
 
             var saveButtonDiv = $("<div>", {
-                class: "saveBtn col-1",
-                "data-unixTime": value.unix()
+                class: "saveBtn col-1 d-flex justify-content-center align-items-center",
+                "data-unixTime": value.unix(),
+                html: `<i class="fas fa-save" aria-hidden="true"></i>`
             })
             
             var timeBloclkRow = $("<div>", {
@@ -132,9 +133,12 @@ $(document).ready(function() {
       }
 
     function handelSaveIconClick(e){
-        if(!$(e.target).hasClass('saveBtn')) return
-        var time = $(e.target).attr("data-unixTime")
-        var taskDesc = $(e.target).prev(".description").val()
+        if(!$(e.target).hasClass('saveBtn') && !$(e.target).hasClass('fa-save')) return
+        var time;
+        var taskDesc;
+        if($(e.target).hasClass('saveBtn')){ time = $(e.target).attr("data-unixTime"); taskDesc = $(e.target).prev(".description").val()};
+        if($(e.target).hasClass('fa-save')){ time = $(e.target).parent().attr("data-unixTime"); taskDesc = $(e.target).parent().prev(".description").val()};
+        
         var plannerData = getLocalStorage("plannerData")
 
         if (taskDesc.length < 1){
