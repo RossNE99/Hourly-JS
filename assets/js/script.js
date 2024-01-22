@@ -4,8 +4,11 @@ $(document).ready(function() {
 
     $("#currentDay").text(currentDay)
 
-    var plannerData = JSON.parse(localStorage.getItem("plannerData"))
-    if (!plannerData) plannerData = []
+    function getPlannerData(){
+        var plannerData = JSON.parse(localStorage.getItem("plannerData"))
+        if (!plannerData) plannerData = []
+        return plannerData
+    }
 
     function getHoursBetween(start, end) {
         const startHour = dayjs(start).startOf('hour');
@@ -18,7 +21,6 @@ $(document).ready(function() {
         hoursArray.push(currentHour);
         currentHour = currentHour.add(1, 'hour');
         }
-    
         return hoursArray;
     }
 
@@ -55,7 +57,8 @@ $(document).ready(function() {
     }
 
     function getTaskDescForTime(time) {
-        const foundTime = plannerData.find(obj => obj.hasOwnProperty(time));
+        var plannerData = getPlannerData()
+        var foundTime = plannerData.find(obj => obj.hasOwnProperty(time));
         if (foundTime) {
           return foundTime[time];
         } else {
@@ -67,29 +70,23 @@ $(document).ready(function() {
         if(!$(e.target).hasClass('saveBtn')) return
         var time = $(e.target).attr("data-unixTime")
         var taskDesc = $(e.target).prev(".description").val()
-        plannerData = JSON.parse(localStorage.getItem("plannerData"))
-        if (!plannerData) plannerData = []
+        var plannerData = getPlannerData()
 
         if (taskDesc.length < 1){
             if(plannerData.find(obj => obj.hasOwnProperty(time))){
-                var temp = plannerData.filter(obj => !obj.hasOwnProperty(time));
+                var plannerDataWithoutDeletedTask = plannerData.filter(obj => !obj.hasOwnProperty(time));
                 localStorage.removeItem("plannerData")
-                localStorage.setItem("plannerData", JSON.stringify(temp))
+                localStorage.setItem("plannerData", JSON.stringify(plannerDataWithoutDeletedTask))
             }
-            console.log("tt")
             return
         } 
 
         var newTask = {}
         newTask[time] = taskDesc //Format newTaks so it looks like {time: taskDesc}
         
-        const indexToRemove = plannerData.findIndex(newTask => newTask.hasOwnProperty(time));
-        if (indexToRemove !== -1) {
-            // Key exists, remove the object at the found index
-            plannerData.splice(indexToRemove, 1);
-          }
+        var plannerDataWithEditedTask = plannerData.filter(obj => !obj.hasOwnProperty(time)); // Key exists, remove the object at the found index
 
-        localStorage.setItem("plannerData", JSON.stringify([...plannerData, newTask])) 
+        localStorage.setItem("plannerData", JSON.stringify([...plannerDataWithEditedTask, newTask])) 
     }
 
     renderPlanner()
