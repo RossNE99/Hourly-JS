@@ -32,33 +32,21 @@ $(document).ready(function() { //Wait untill everything is loaded and then run t
             var startTimeObj = dayjs(startTime)  //parse dateTime strings into dayjs object
             var endTimeObj = dayjs(endTime)
             if(targetid==="backADay"){ //if back a day button is clicked
-                 if(!checkIfIsSameDay()) return
                  startTime = startTimeObj.subtract(1, 'day').format('YYYY-MM-DD H:mm:ss'); //subtract one day from start and end dates
                  endTime = endTimeObj.subtract(1, 'day').format('YYYY-MM-DD H:mm:ss');
                  localStorage.setItem("plannerPrefrences", JSON.stringify({startTime, endTime})) //update local storage to reflect chnage
                  renderPlanner() //rerender the task rows so planner shows data for the new range
             } else if(targetid==="today"){  //if today button is clicked
-                console.log("ttt")
                 startTime = dayjs().startOf('hour').set("hour", 9).format('YYYY-MM-DD H:mm:ss')
                 endTime = dayjs().startOf('hour').set("hour", 18).format('YYYY-MM-DD H:mm:ss')
                 localStorage.setItem("plannerPrefrences", JSON.stringify({startTime, endTime}))
                 renderPlanner()
 
             } else if(targetid==="forwardADay"){  //if forward a day button is clicked
-                if(!checkIfIsSameDay()) return
                 startTime = startTimeObj.add(1, 'day').format('YYYY-MM-DD H:mm:ss');
                 endTime = endTimeObj.add(1, 'day').format('YYYY-MM-DD H:mm:ss');
                 localStorage.setItem("plannerPrefrences", JSON.stringify({startTime, endTime}))
                 renderPlanner()
-            }
-
-            function checkIfIsSameDay(){
-                const isSameDay = startTimeObj.format('YYYY-MM-DD') === endTimeObj.format('YYYY-MM-DD');
-                console.log(isSameDay)
-                if(!isSameDay){
-                    showToast("Error", `Only one day must be selcted to use the prev and next buttons, if you have a range set please change it to one day only`, `fa-exclamation-triangle`, `red`)
-                }
-                return isSameDay
             }
     }
 
