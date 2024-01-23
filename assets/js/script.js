@@ -93,7 +93,7 @@ $(document).ready(function() {
                 text: getTaskDescForTime(value.unix())
             })
 
-            var saveButtonDiv = $("<div>", {
+            var saveButton = $("<button>", {
                 class: "saveBtn col-1 d-flex justify-content-center align-items-center",
                 "data-unixTime": value.unix(),
                 html: `<i class="fas fa-save" aria-hidden="true"></i>`
@@ -105,7 +105,7 @@ $(document).ready(function() {
 
             $(timeBloclkRow).append(hourDiv)
             $(timeBloclkRow).append(discriptionText)
-            $(timeBloclkRow).append(saveButtonDiv)
+            $(timeBloclkRow).append(saveButton)
 
             $(".container").append(timeBloclkRow)
         });
